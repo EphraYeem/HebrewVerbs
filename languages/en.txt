@@ -1,0 +1,35 @@
+title
+HebrewVerbs
+
+welcome
+Welcome to root words finding program
+
+instructions
+Please insert the word that you want to get the root for in the text box below, and then drag the matching nikkud signs
+
+ShvaInstructions
+there is no need to add Shvas, they will be added automatically where you won't add any nikkud
+
+continue
+Continue
+
+goBack
+Previous
+
+yes
+Yes
+
+notInHebrewErr
+Error - please write a verb in Hebrew
+
+wrongDropErr
+Error - you can only drag the nikkud signs to the letters
+
+dotToNotSinErr
+Error - you can add this nikkud sign only to the letter sin
+
+shuruqToNotVavErr
+Error - you can add this nikkud sign only to the letter vav
+
+waitPlease
+Please wait, the system is extracting your root right now
