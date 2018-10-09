@@ -22,26 +22,26 @@ public class DnDSupportedJLabel extends JLabel {
 	private AdvancedLetter ALetter;
 	private String nikkudSignName;
 
-	private boolean letterOrNikkud;// true for letter, false for nikkud;
+	private boolean isDNDSupported;// true for letter, false for nikkud;
 
-	public DnDSupportedJLabel(String letter, List<AdvancedLetter> verbPunctuated, int index) {
-		super(letter);
-		setALetter(verbPunctuated.get(index));
-		setLetterOrNikkud(true);
+	public DnDSupportedJLabel(AdvancedLetter letter) {
+		super(letter.toString());
+		setALetter(letter);
+		setDNDSupported(true);
 		initDnD();
 	}
 
 	public DnDSupportedJLabel(NikkudUpgraded nikkudSign) {
 		super(nikkudSign.getImg());
 		setNikkudSignName(nikkudSign.getName());
-		setLetterOrNikkud(false);
+		setDNDSupported(false);
 		initDnD();
 	}
 
 	public DnDSupportedJLabel(String letter) {
 		super(letter);
 		setALetter(new AdvancedLetter(letter));
-		setLetterOrNikkud(true);
+		setDNDSupported(true);
 		initDnD();
 	}
 
@@ -60,7 +60,7 @@ public class DnDSupportedJLabel extends JLabel {
 	private class NikkudTransferHandler extends TransferHandler {
 		@Override
 		public int getSourceActions(JComponent comp) {
-			if (((DnDSupportedJLabel) comp).isLetterOrNikkud()) {
+			if (((DnDSupportedJLabel) comp).isDNDSupported()) {
 				return NONE;
 			}
 			return COPY;
@@ -84,7 +84,7 @@ public class DnDSupportedJLabel extends JLabel {
 
 		@Override
 		public boolean importData(JComponent comp, Transferable t) {
-			if (!((DnDSupportedJLabel) comp).isLetterOrNikkud()) {
+			if (!((DnDSupportedJLabel) comp).isDNDSupported()) {
 				First_screen.dispMessegeQuietly(First_screen.displayWords.get("wrongDropErr"));
 				return false;
 			}
@@ -130,12 +130,12 @@ public class DnDSupportedJLabel extends JLabel {
 		ALetter = aLetter;
 	}
 
-	public boolean isLetterOrNikkud() {
-		return letterOrNikkud;
+	public boolean isDNDSupported() {
+		return isDNDSupported;
 	}
 
-	public void setLetterOrNikkud(boolean letterOrNikkud) {
-		this.letterOrNikkud = letterOrNikkud;
+	public void setDNDSupported(boolean isDNDSupported) {
+		this.isDNDSupported = isDNDSupported;
 	}
 
 	public String getNikkudSignName() {

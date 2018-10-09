@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.JPanel;
 
+import rootExtracting.AdvancedLetter;
 import rootExtracting.AdvancedVerb;
 
 import javax.swing.BoxLayout;
@@ -37,6 +38,12 @@ public class Second_screen extends JPanel implements ActionListener{
         add(Box.createVerticalGlue());
         
         Icon icon = new ImageIcon(System.getProperty("user.dir")+"/resources/loadingGif.gif");
+        
+        JPanel pnlVerbStatus = new JPanel();
+        add(pnlVerbStatus);
+        
+        add(Box.createVerticalGlue());
+        
         JLabel loading = new JLabel(icon);
         loading.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(loading);
@@ -51,7 +58,7 @@ public class Second_screen extends JPanel implements ActionListener{
 		add(btnGoBack);
 		
 		theVerb.autoCompleteNikkud();
-		theVerb.extractRoot();
+		theVerb.extractRoot(pnlVerbStatus);
 	}
 	@Override
 	public void actionPerformed(ActionEvent ae) {

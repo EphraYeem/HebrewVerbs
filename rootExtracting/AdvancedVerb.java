@@ -1,14 +1,16 @@
 package rootExtracting;
 
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JPanel;
+
+import gui.DnDSupportedJLabel;
 import gui.First_screen;
+import javafx.geometry.VPos;
 
 public class AdvancedVerb {
-	private final int THILIT = 1;
-	private final int TOCHIT = 2;
-	private final int SOFIT = 3;
 	private List<AdvancedLetter> verbPunctuated;
 
 	public AdvancedVerb() {
@@ -33,49 +35,83 @@ public class AdvancedVerb {
 		}
 	}
 	
-	public void extractRoot() {
+	public void extractRoot(JPanel pnlVerbStatus) {
 		//TODO the actual algorithm guys (probably won't return void tho)
-		wipeOutThiliot(verbPunctuated);
-		wipeOutSofiot(verbPunctuated);
-		wipeOutTochiot(verbPunctuated);
+		List<AdvancedLetter> verbCopy = new ArrayList<AdvancedLetter>(verbPunctuated);//for future use
+		//cleans out the mosafiot in order to leave the root words only
+		String thilit = wipeOutThiliot(verbPunctuated);
+		System.out.println(verbPunctuated);
+		statusPanelRefresh(pnlVerbStatus, verbPunctuated);
+		String sofit = wipeOutSofiot(verbPunctuated);
+		System.out.println(verbPunctuated);
+		statusPanelRefresh(pnlVerbStatus, verbPunctuated);
+		String Tochit = wipeOutTochiot(verbPunctuated);
+		System.out.println(verbPunctuated);
+		statusPanelRefresh(pnlVerbStatus, verbPunctuated);
+		//now checks if it or part of it is in the database
+		//pour the root words to the binyanim to double check if it's the actually the root words
+		//deep check including nikkud
 	}
 	
-	private void wipeOutThiliot(List<AdvancedLetter> vp) {
-		System.out.println(vp);
-		if(vp.get(0).getLetter().equals(First_screen.thiliot.get(0)))//checks for Vav hachibur
+	private void statusPanelRefresh(JPanel pnlVerbStatus, List<AdvancedLetter> verbPunctuated2) {
+		pnlVerbStatus.removeAll();
+		for (AdvancedLetter letter : verbPunctuated) {
+        	pnlVerbStatus.add(new DnDSupportedJLabel(letter), 0);
+        	pnlVerbStatus.getComponent(0).setFont(new Font("Times New Roman", Font.PLAIN, 35));
+		}		
+	}
+
+	private String wipeOutThiliot(List<AdvancedLetter> vp) {
+		String returnValue = null;
+		if(vp.get(0).getLetter().equals(First_screen.thiliot.get(0))) {//checks for Vav hachibur
+			returnValue = vp.get(0).toString();
 			vp.remove(0);
+		}
 		if(isMosafit(vp.subList(0, 2),First_screen.thiliot)) {//checks for other two-letter mosafiot
+			returnValue = vp.get(0).toString() + vp.get(1).toString();
 			vp.remove(0);
 			vp.remove(0);
 		}
-		else if (isMosafit(vp.get(0),First_screen.thiliot))//checks for other one-letter mosafiot
+		else if (isMosafit(vp.get(0),First_screen.thiliot)) {//checks for other one-letter mosafiot
+			returnValue = vp.get(0).toString();
 			vp.remove(0);
-		System.out.println(vp);
+		}
+		return returnValue;
 	}
 	
-	private void wipeOutSofiot(List<AdvancedLetter> vp) {
-		System.out.println(vp);
+	private String wipeOutSofiot(List<AdvancedLetter> vp) {
+		String returnValue = null;
 		if(isMosafit(vp.subList(vp.size()-2, vp.size()),First_screen.sofiot)) {//checks for other two-letter mosafiot
+			returnValue = vp.get(vp.size()-1).toString() + vp.get(vp.size() - 2).toString();
 			vp.remove(vp.size()-1);
 			vp.remove(vp.size()-1);
 		}
-		else if (isMosafit(vp.get(vp.size()-1),First_screen.sofiot))//checks for other one-letter mosafiot
+		else if (isMosafit(vp.get(vp.size()-1),First_screen.sofiot)) {//checks for other one-letter mosafiot
+			returnValue = vp.get(vp.size()-1).toString();
 			vp.remove(vp.size()-1);
-		System.out.println(vp);
+		}
+		return returnValue;
 	}
 	
-	private void wipeOutTochiot(List<AdvancedLetter> vp) {
-		System.out.println(vp);
+	private String wipeOutTochiot(List<AdvancedLetter> vp) {
+		String returnValue = null;
 		String for1stAnd3rdCases = vp.get(1).getLetter();
-		if(for1stAnd3rdCases.equals(First_screen.tochiot.get(0)))//checks if the second letter is tochit vav (kinda special case in present kal 2&3 - e.g. lovesh
+		if(for1stAnd3rdCases.equals(First_screen.tochiot.get(0))) {//checks if the second letter is tochit vav (kinda special case in present kal 2&3 - e.g. lovesh
+			returnValue = vp.get(1).toString();
 			vp.remove(1);
-		else if (vp.get(2).getLetter().equals(First_screen.tochiot.get(1)))//e.g. hilbish
+		}
+		else if (vp.get(2).getLetter().equals(First_screen.tochiot.get(1)) ||
+				 vp.get(2).getLetter().equals(First_screen.tochiot.get(0))) {//e.g. hilbish
+			returnValue = vp.get(2).toString();
 			vp.remove(2);
+		}
 		else if (for1stAnd3rdCases.equals(First_screen.tochiot.get(2)) ||
 				 for1stAnd3rdCases.equals(First_screen.tochiot.get(3)) ||
-				 for1stAnd3rdCases.equals(First_screen.tochiot.get(4)))
+				 for1stAnd3rdCases.equals(First_screen.tochiot.get(4))) {
+			returnValue = vp.get(1).toString();
 			vp.remove(1);
-		System.out.println(vp);
+		}
+		return returnValue;
 	}
 	
 	private boolean isMosafit(List<AdvancedLetter> maybeMosafit, List<String> checkingList) {//for two-letter Mosafit
